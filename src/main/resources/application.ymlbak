@@ -1,0 +1,36 @@
+--- # Start
+
+--- # change port
+server:
+  port: 8085
+
+--- # mvc View
+  mvc:
+    view:
+      prefix: /WEB-INF/views
+      suffix: .jsp
+
+
+--- # devtools
+  spring:
+    devtools:
+      livereload:
+        enabled: true
+      remote:
+        restart:
+          enabled: false
+
+
+--- # mysql settings
+  spring:
+    datasource:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/selfstudy?serverTimezone=UTC&characterEncoding=UTF-8
+      username: root
+      password: 1234
+
+
+--- #mybatis mapper xml
+mybatis:
+  mapper-locations: classpath:sqlmapper/*.xml
+  configuration.map-underscore-to-camel-case: true

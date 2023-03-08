@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.selfstudy.dao.StudyDao">
+
+
+    <!-- 공부 기록 전체리스트 -->
+    <select id="doStudyList" resultType="com.example.selfstudy.vo.Vo_study">
+        SELECT
+            id,
+            study_day,
+            contents,
+            DATE_FORMAT(reg_day, "%Y/%c/%d") as reg_day
+        FROM
+            study;
+    </select>
+
+    <!-- 공부 기록 단일 리스트 -->
+    <select id="doStudyListOne" resultType="com.example.selfstudy.vo.Vo_study">
+        SELECT
+           id,
+           study_day,
+           contents,
+           reg_day
+        FROM
+            study
+        WHERE
+            id = #{strId};
+    </select>
+
+     <!-- 공부 기록 수정(업데이트) -->
+        <update id="doStudyUp" parameterType="com.example.selfstudy.vo.Vo_study">
+            UPDATE
+               study
+            SET
+                study_day = #{studyDay},
+                contents = #{contents},
+                reg_day = now()
+            WHERE
+                id = #{id};
+        </update>
+
+        <!-- 공부 기록 삭제(업데이트) -->
+        <delete id="doStudyDel" parameterType="com.example.selfstudy.vo.Vo_study">
+            Delete FROM study WHERE id = #{id};
+        </delete>
+
+<!--          --><!-- 공부 기록 등록 -->
+<!--         <Insert id="doStudyIns" parameterType="com.example.selfstudy.vo.Vo_study" useGenerateKeys="true" keyProperty="id"> -->
+<!--            <![CDATA[ -->
+<!--             Insert into study(study_day,contents,reg_day) -->
+<!--             values (#{study_day},#{contents},#{reg_day}) -->
+<!--             ]]> -->
+<!--         </Insert> -->
+
+        <insert id="doStudyIns" parameterType="com.example.selfstudy.vo.Vo_study" useGeneratedKeys="true" keyProperty="id">
+          insert into study (
+            study_day,
+            contents,
+            reg_day
+          ) values (
+            #{studyDay},
+            #{contents},
+            curdate()
+          )
+        </insert>
+
+
+</mapper>
+
+
+<!--    <resultMap id="map_vo_study" type="com.example.selfstudy.vo.Vo_study">-->
+<!--        <result column="id" property="id" jdbcType="NVARCHAR" javaType="String" />-->
+<!--        <result column="study_day" property="study_day" jdbcType="NVARCHAR" javaType="String" />-->
+<!--        <result column="contents" property="contents" jdbcType="NVARCHAR" javaType="String" />-->
+<!--        <result column="reg_day" property="reg_day" jdbcType="NVARCHAR" javaType="String" />-->
+<!--    </resultMap>-->

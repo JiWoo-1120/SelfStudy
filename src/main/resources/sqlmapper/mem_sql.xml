@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.selfstudy.dao.MemDao">
+
+    <!-- 가장 최근 memNo 찾기 -->
+    <select id="findMemNo" resultType="String">
+       SELECT
+            MEM_NO
+       FROM
+            Jiwoo_MEM
+       ORDER BY REG_DATE
+       DESC LIMIT 1;
+    </select>
+
+    <!-- 회원정보 저장 -->
+    <insert id="saveMem" parameterType="com.example.selfstudy.vo.MemVo">
+       insert into Jiwoo_MEM(
+            MEM_NO, MEM_ID, MEM_PASSWORD, MEM_NAME, EMAIL,
+            ZIPCODE, BASE_ADRES, DETAIL_ADRES, PHONE, REG_DATE,
+            UPDATE_DATE
+       ) values (
+             #{memNo}, #{memId}, #{memPassword}, #{memName}, #{email},
+             #{zipcode}, #{baseAdres}, #{detailAdres}, #{phone}, #{regDate},
+             #{updateDate}
+       )
+    </insert>
+
+</mapper>
