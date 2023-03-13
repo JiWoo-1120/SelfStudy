@@ -15,11 +15,11 @@
     <!-- 회원정보 저장 -->
     <insert id="saveMem" parameterType="com.example.selfstudy.vo.MemVo">
        insert into Jiwoo_MEM(
-            MEM_NO, MEM_ID, MEM_PASSWORD, MEM_NAME, EMAIL,
+            MEM_NO, MEM_ID, MEM_PASSWORD, MEM_PASSWORD_SALT, MEM_NAME, EMAIL,
             ZIPCODE, BASE_ADRES, DETAIL_ADRES, PHONE, REG_DATE,
             UPDATE_DATE
        ) values (
-             #{memNo}, #{memId}, #{memPassword}, #{memName}, #{email},
+             #{memNo}, #{memId}, #{memPassword}, #{memPasswordSalt}, #{memName}, #{email},
              #{zipcode}, #{baseAdres}, #{detailAdres}, #{phone}, #{regDate},
              #{updateDate}
        )

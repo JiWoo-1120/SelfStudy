@@ -21,25 +21,19 @@ public class MemControl {
     @Autowired
     private MemService memService;
 
-    // SAVE
+    // SAVE(회원가입)
     @PostMapping("/insert")
-    public String addMember(@ModelAttribute MemVo memVo, Model model){
+    public String addMember(@ModelAttribute MemVo memVo, Model model) throws Exception {
 
-        System.out.println("email =>" + memVo.getEmail());
-        System.out.println("phone =>" + memVo.getPhone());
-        System.out.println("baseAdres =>" + memVo.getBaseAdres());
-        System.out.println("memId =>" + memVo.getMemId());
-        System.out.println("memName =>" + memVo.getMemName());
-        System.out.println("memPassword =>" + memVo.getMemPassword());
-
+        // 회원번호 만들기
         String memNo = memService.createMemberNumber();
         System.out.println("컨틀롤러가 받은 memNo => " + memNo);
-
         memVo.setMemNo(memNo);
-        String msg = null;
-        int result = memService.joinMembership(memVo);
+        memVo.setMemPasswordSalt("00");
 
-        /*  유효성 검사한거 if문으로 돌려서 다시 검사해보기  */
+        // 유효성 검사
+        String msg = null;
+        int result = memService.chkValidation(memVo);
         if (result == 1) {
             msg = "입력하지 않은 정보가 있습니다.";
         } else if (result == 2) {
@@ -53,9 +47,29 @@ public class MemControl {
         }
 
         if(msg != null){
-           model.addAttribute("msg",msg);
-           return "/login/member_join";
+            model.addAttribute("msg",msg);
+            return "/login/member_join";
         }
+
+        // 양방향 암호화 AES-256
+        MemVo encryptedData = memService.encryptionAES(memVo);
+
+        // 비밀번호 암호화 (단방향 암호화 SHA-256)
+        encryptedData = memService.encryptionSHA(encryptedData);
+
+        // 데이터 저장
+        memService.joinMembership(encryptedData);
+
+        // 양방향 복호화 AES-256
+        memService.decryptionAES(encryptedData);
+        System.out.println(encryptedData.getMemName());
+        System.out.println(encryptedData.getEmail());
+        System.out.println(encryptedData.getZipcode());
+        System.out.println(encryptedData.getBaseAdres());
+        System.out.println(encryptedData.getDetailAdres());
+        System.out.println(encryptedData.getPhone());
+
+
         model.addAttribute("memVo", memVo);
         return "/login/welcome";
     }

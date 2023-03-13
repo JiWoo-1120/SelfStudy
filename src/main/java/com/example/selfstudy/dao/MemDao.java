@@ -11,4 +11,6 @@ public interface MemDao {
 
     // 회원정보 저장
     void saveMem(MemVo memVo);
+
+
 }

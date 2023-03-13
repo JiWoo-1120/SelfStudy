@@ -153,7 +153,7 @@
                                     <option value="@nate.com">@nate.com</option>
                                 </select>
                             </div>
-                            <div class="col"><button class="btn btn-sm btn-outline-success mt-1"> 중복확인 </button></div>
+                            <div class="col"><button class="btn btn-sm btn-outline-success mt-1" id="idck"> 중복확인 </button></div>
                         </div>
                         <div class="invalid-feedback">
                             이메일을 입력해주세요.
@@ -222,6 +222,12 @@
 <script src="/js/form-validation.js"></script>
 </body>
 </html>
+
+<!-- 아이디 중복 검사 -->
+<script>
+
+
+</script>
 
 
 
@@ -297,19 +303,19 @@
     });
 
     <!-- 번호 4자리까지만 입력 제한 -->
-    // function numberMaxLength(e){
-    //     if(e.value.length > e.maxLength){
-    //         e.value = e.value.slice(0, e.maxLength);
-    //     }
-    // }
-    //
-    // <!-- 비밀번호가 조건에 맞지않을 시 값 초기화 -->
-    // function pwNull(){
-    //     $("#memPw input").each(function () {
-    //         $(this).val("");
-    //     });
-    //     $('#memPassword').focus();
-    // }
+    function numberMaxLength(e){
+        if(e.value.length > e.maxLength){
+            e.value = e.value.slice(0, e.maxLength);
+        }
+    }
+
+    <!-- 비밀번호가 조건에 맞지않을 시 값 초기화 -->
+    function pwNull(){
+        $("#memPw input").each(function () {
+            $(this).val("");
+        });
+        $('#memPassword').focus();
+    }
 
     <!-- 이메일 도메인 선택(직접입력) -->
     $(function() {

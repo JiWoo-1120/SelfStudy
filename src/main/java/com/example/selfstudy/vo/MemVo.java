@@ -15,6 +15,7 @@ public class MemVo {
     private String memNo;
     private String memId;
     private String memPassword;
+    private String memPasswordSalt;
     private String memName;
     private String email;
     private String zipcode;
