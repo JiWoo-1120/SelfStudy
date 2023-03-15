@@ -1,5 +1,6 @@
 package com.example.selfstudy.service.imp;
 
+import com.example.selfstudy.dao.MemDao;
 import com.example.selfstudy.vo.MemVo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -7,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @SpringBootTest
 class MemImpTest {
@@ -17,12 +16,15 @@ class MemImpTest {
     @Autowired
     MemImp memImp;
 
+    @Autowired
+    MemDao memDao;
+
     String memNo = "CU20230306A00001";
     String memId = "didwldn";
     String memPassword ="asd123456789!";
     String memPasswordSalt ="W715GvOpBXSCYSxoScN2/Q==";
     String memName = "d테스트";
-    String email = "ID2naver@naver.com";
+    String email = null;
     String zipcode = "12345";
     String baseAdres = "태양계 지구 한국";
     String detailAdres = "가산";
@@ -79,10 +81,20 @@ class MemImpTest {
     @Test
     void encryptionSHA() throws NoSuchAlgorithmException {
 
-
         memImp.encryptionSHA(memVo);
 
+    }
 
+    @DisplayName("아이디, 이메일 중복검사 체크")
+    @Test
+    void isContainValidation() {
+
+        // 예상
+        Map<String, Object> myMap = new HashMap<>();
+        myMap.put("result", "SUCCESS");
+
+        // 실제
+        memImp.isContainValidation(memVo);
 
     }
 }

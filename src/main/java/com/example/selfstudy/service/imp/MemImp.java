@@ -20,6 +20,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import static org.springframework.util.StringUtils.hasText;
@@ -67,17 +69,25 @@ public class MemImp implements MemService {
         return memNo;
     }
 
-    /* 유효성 검사 */
+    /* 중복확인 유효성 검사 */
+//    @Override
+//    public Map<String,Object> isContainValidation(MemVo memVo) {
+//
+//        Map<String,Object> result = new HashMap<>();
+//        if(memVo.getEmail() != null && memVo.getEmail().trim().equals("")){
+//            //DB 조회 후 값 return
+//            result.put("result","SUCCESS");
+//        }
+//        if(memVo.getMemId() != null && memVo.getMemId().trim().equals("")){
+//            //DB 조회 후 값 return
+//            result.put("result","FAIL");
+//        }
+//        return result;
+//    }
+
+    /* 회원가입 유효성 검사 */
     @Override
-    public int chkValidation(MemVo memVo) {
-
-        SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date now = new Date();
-        String nowTime = dateTimeFormat.format(now);
-
-        memVo.setRegDate(nowTime);
-        memVo.setUpdateDate(nowTime);
-
+    public int saveMemberValidation(MemVo memVo) {
         int result = 0;
 
         if (memVo == null){
@@ -91,7 +101,6 @@ public class MemImp implements MemService {
         } else if(!Pattern.matches("^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$", memVo.getPhone())) {
             result = 5;
         }
-
         return result;
     }
 
@@ -230,7 +239,51 @@ public class MemImp implements MemService {
 
     }
 
+    /* id, email 중복, 유효성 검사 */
+    @Override
+    public Map<String, Object> isContainValidation(MemVo memData) {
 
+        Map<String,Object> result = new HashMap<>();
+        int cnt = 0;
+
+        // 중복 memId 확인
+        if(memData.getMemId() != null && !(memData.getMemId().isEmpty() && memData.getMemId().trim().equals(""))){
+            //DB 조회 후 값 return
+            cnt = memDao.findId(memData.getMemId());
+            if (cnt == 0 ){
+                result.put("result","SUCCESS");
+            } else {
+                result.put("result","FAIL");
+            }
+        }
+
+        // 중복 이메일 확인
+        if(memData.getEmail() != null && !(memData.getEmail().isEmpty() && memData.getEmail().trim().equals(""))){
+            //DB 조회 후 값 return
+            cnt = memDao.findEmail(memData.getEmail());
+            if (cnt == 0 ){
+                result.put("result","SUCCESS");
+            } else {
+                result.put("result","FAIL");
+            }
+        }
+
+        return result;
+    }
+
+//    /* 중복 memId 확인 */
+//    @Override
+//    public int idcheck(String memId) {
+//        int count = memDao.findId(memId);
+//        return count;
+//    }
+//
+//    /* 중복 email 확인 */
+//    @Override
+//    public int emailCheck(String email) {
+//        int count = memDao.findEmail(email);
+//        return count;
+//    }
 }
 
 

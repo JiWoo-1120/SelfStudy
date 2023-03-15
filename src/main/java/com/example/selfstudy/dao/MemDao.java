@@ -12,5 +12,10 @@ public interface MemDao {
     // 회원정보 저장
     void saveMem(MemVo memVo);
 
+    // 중복 memId 확인
+    int findId(String memId);
+
+    // 중복 이메일 확인
+    int findEmail(String email);
 
 }

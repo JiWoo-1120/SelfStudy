@@ -25,4 +25,22 @@
        )
     </insert>
 
+    <!-- memId 중복 카운트 -->
+    <select id="findId" parameterType="String" resultType="Int">
+       SELECT COUNT(*)
+       FROM
+            Jiwoo_MEM
+       WHERE
+            MEM_ID = #{memId};
+    </select>
+
+    <!-- memId 중복 카운트 -->
+    <select id="findEmail" parameterType="String" resultType="Int">
+       SELECT COUNT(*)
+       FROM
+            Jiwoo_MEM
+       WHERE
+            EMAIL = #{email};
+    </select>
+
 </mapper>

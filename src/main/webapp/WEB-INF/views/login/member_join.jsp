@@ -120,7 +120,7 @@
                                     아이디를 입력하신 후 중복확인을 해주세요.
                                 </div>
                             </div>
-                            <div class="col-sm-3"><button class="btn btn-sm btn-outline-success mt-1">중복확인</button></div>
+                            <div class="col-sm-3"><button class="btn btn-sm btn-outline-success mt-1" id="idck" type="button">중복확인</button></div>
                     </div>
 
                     <div class="col-12">
@@ -143,8 +143,8 @@
                     <div class="col-12">
                         <div class="row">
                             <label for="email1" class="form-label">이메일<b><span class="star">*</span></b></label>
-                            <div class="col"><input type="text" class="form-control" id="email1" placeholder="이메일 아이디" required></div>
-                            <div class="col"><input type="text" class="form-control" id="email2" placeholder="이메일을 선택하세요." required></div>
+                            <div class="col"><input type="text" class="form-control" id="email1" name="email1" placeholder="이메일 아이디" required></div>
+                            <div class="col"><input type="text" class="form-control" id="email2" name="email2" placeholder="이메일을 선택하세요." required></div>
                             <div class="col">
                                 <select class="form-select col" name="select" id="emailSelect" required>
                                     <option value="1">직접입력</option>
@@ -153,7 +153,7 @@
                                     <option value="@nate.com">@nate.com</option>
                                 </select>
                             </div>
-                            <div class="col"><button class="btn btn-sm btn-outline-success mt-1" id="idck"> 중복확인 </button></div>
+                            <div class="col"><button id="emailck" class="btn btn-sm btn-outline-success mt-1" type="button"> 중복확인 </button></div>
                         </div>
                         <div class="invalid-feedback">
                             이메일을 입력해주세요.
@@ -223,20 +223,60 @@
 </body>
 </html>
 
-<!-- 아이디 중복 검사 -->
-<script>
-
-
-</script>
-
-
 
 <script>
-    $(document).ready(function (){
+    $(document).ready(function() {
+        // 중복 체크 확인
+        var idck = 0;
+        var emailck = 0;
+
+        <!-- 아이디 중복 검사 -->
+        //idck 버튼을 클릭했을 때
+        $('#idck').click(function () {
+            var memId = $('#memId').val();
+            if(memId == null || memId == '') {
+                alert('아이디값은 필수입니다.')
+                return false;
+            }
+            isContainValid({ "memId" : memId }, function(result){
+                if(result == 'SUCCESS'){
+                    alert('사용할수있는 아이디 입니다');
+                    idck = 1;
+                    console.log("idck 아이디 확인 1 => " + idck);
+                }else{
+                    alert('중복된 아이디 입니다');
+                    console.log("idck 아이디 확인 0 => " + idck);
+                }
+
+            })
+        });
+
+        <!-- 이메일 중복 검사 -->
+        //emailck 버튼을 클릭했을 때
+        $('#emailck').click(function () {
+
+            // email 인풋값
+            var memEmail = $('#email1').val() + $('#email2').val();
+            $('#email').val(memEmail);
+            console.log("email 인풋 값 => " + memEmail);
+            var email = $('#email').val();
+
+            isContainValid({ "email" : email }, function(result){
+                if(result == 'SUCCESS'){
+                    alert('사용할수있는 이메일 입니다');
+                    emailck = 1;
+                    console.log("emailck 이메일 확인 1 => " + emailck);
+                }else{
+                    alert('중복된 이메일 입니다');
+                    console.log("emailck 이메일 확인 0 => " + emailck);
+                }
+            })
+        });
+
         <!-- 저장 버튼 클릭 -->
         $('#joinBtn').click(function() {
-           // 입력확인
-            console.log("버튼 눌러버림 ");
+
+            // 입력확인
             var id = $('#memId').val();
             var email1 = $('#email1').val();
             var email2 = $('#email2').val();
@@ -249,58 +289,110 @@
             var mempho1 = $('#memPho1').val();
             var mempho2 = $('#memPho2').val();
             var pwChk = /^(?=.*?[0-9])(?=.*?[A-Za-z])(?=.*?[#?!@$ %^&*~-]).{8,20}$/;    // 비밀번호 정규식(숫자,문자,특수문자 8~20)
-            var emailChk1 = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*$/;       // 이메일 정규식
-            var emailChk2 = /^@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;        // 이메일 정규식
+            var emailChk1 = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*$/;                        // 이메일 정규식
+            var emailChk2 = /^@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;      // 이메일 정규식
 
-            // 비밀번호 형식 체크
-            // if(pw1 == pw2) {
-            //     console.log(pw1);
-            //     // 정규식 체크
-            //     if (pw1.match(pwChk) == null && pw2.match(pwChk) == null){
-            //         alert("비밀번호는 숫자, 문자, 특수문자를 포함한 8~20자리 입력해주세요.");
-            //         pwNull();
-            //         return false;
-            //     }
-            //     if (pw1.search(/\s/) != -1){
-            //         alert("비밀번호는 공백 없이 입력해주세요.")
-            //         pwNull();
-            //         return false;
-            //     }
-            // } else if(pw1 != pw2){
-            //     alert("비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
-            //     pwNull();
-            //     return false;
-            // }
-            //
-            // // 이메일 형식 체크
-            // if(email1 != null && email2 != null ){
-            //     // 정규식체크
-            //     if(email1.match(emailChk1) == null && email2.match(emailChk2) == null ){
-            //         alert("이메일 형식에 맞게 기입해주세요.");
-            //         $('#email1').focus();
-            //         return false;
-            //     }
-            // }
-
-            // memEmail 인풋값
-            var memEmail = email1 + email2;
-            $('#email').val(memEmail);
-
-            // memphone 인풋값
+            // phone 인풋값
             var memphone = mempho + mempho1 + mempho2;
             $('#phone').val(memphone);
             console.log("phone 인풋에 담긴 값 => " + memphone);
-
             // baseAdres 인풋값
             var baseAdres = streetAdr + extraAdr;
             $('#baseAdres').val(baseAdres);
             console.log("baseAdres 인풋에 담긴 값 => " + baseAdres);
 
-            // document.getElementById('#joinBtn').submit();
+            // 아이디 중복 체크 확인
+            if(idck == 0){
+                alert("아이디 중복확인을 해주세요.");
+                focusTarget($('#memId'));
+                return false;
+            } else if (emailck == 0) {
+                alert("이메일 중복확인을 해주세요.");
+                focusTarget($('#email'));
+                return false;
+            }
 
+            // 비밀번호 형식 체크
+            if(pw1 == pw2) {
+                console.log(pw1);
+                // 정규식 체크
+                if (pw1.match(pwChk) == null && pw2.match(pwChk) == null){
+                    alert("비밀번호는 숫자, 문자, 특수문자를 포함한 8~20자리 입력해주세요.");
+                    pwNull();
+                    return false;
+                }
+                if (pw1.search(/\s/) != -1){
+                    alert("비밀번호는 공백 없이 입력해주세요.")
+                    pwNull();
+                    return false;
+                }
+            } else if(pw1 != pw2){
+                alert("비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+                pwNull();
+                return false;
+            }
 
+            // 이메일 형식 체크
+            if(email1 != null && email2 != null ){
+                // 정규식체크
+                if(email1.match(emailChk1) == null && email2.match(emailChk2) == null ){
+                    alert("이메일 형식에 맞게 기입해주세요.");
+                    focusTarget($('#email1'));
+                    return false;
+                }
+            }
         });
     });
+
+    <!-- id, email 중복 유효성 검사 -->
+    // function isContainValid(memData, callbackFunc){
+    //     $.ajax({
+    //         async: true,            // 비동기화 여부 (default:true)
+    //         type: 'POST',           // 타입 (get, post, put 등등)
+    //         url: "/newMem/memDataChk", // 요청할 서버 url
+    //         data: memData,            // 보낼 데이터
+    //         dataType: "json",       // 데이터 타입
+    //         contentType: "application/json; charset=UTF-8",
+    //         success: function (data) {
+    //             if(data != null && data.result != null ){ // .result :인터페이스의 결과 읽기 전용 속성은 요청의 결과를 반환
+    //                 if(typeof callbackFunc === 'function') callbackFunc(data.result);
+    //             }else{
+    //                 alert('API 통신 불량')
+    //             }
+    //         }
+    //     });
+    // }
+    <!-- id, email 중복 유효성 검사 -->
+    function isContainValid(memData, callbackFunc){
+        var data = {};
+        if (memData.email != null) {
+            data.email = memData.email;
+        } else if (memData.memId != null) {
+            data.memId = memData.memId;
+        }
+        $.ajax({
+            async: true,            // 비동기화 여부 (default:true)
+            type: 'POST',           // 타입 (get, post, put 등등)
+            url: "/newMem/memDataChk", // 요청할 서버 url
+            data: JSON.stringify(data),            // 보낼 데이터
+            dataType: "json",       // 데이터 타입
+            contentType: "application/json; charset=UTF-8",
+            success: function (data) {
+                if(data != null && data.result != null ){ // .result :인터페이스의 결과 읽기 전용 속성은 요청의 결과를 반환
+                    if(typeof callbackFunc === 'function') callbackFunc(data.result);
+                }else{
+                    alert('API 통신 불량')
+                }
+            }
+        });
+    }
+    <!-- 해당 부분으로 포커스 -->
+    function focusTarget(target){
+        target.focus();
+        const offset = target.offset();
+        $('html, body').animate({scrollTop: offset.top}, 500);
+
+    }
 
     <!-- 번호 4자리까지만 입력 제한 -->
     function numberMaxLength(e){
@@ -315,6 +407,7 @@
             $(this).val("");
         });
         $('#memPassword').focus();
+        focusTarget($('#memPassword'));
     }
 
     <!-- 이메일 도메인 선택(직접입력) -->
